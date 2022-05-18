@@ -10,8 +10,11 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 import networkx as nx
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import matplotlib.pyplot as plt
 
 #the first window class that contains the directed and undirected choice
+
 class Ui_FirstWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -171,6 +174,10 @@ class Ui_MainWindow(object):
         self.widget = QtWidgets.QWidget(self.verticalLayoutWidget_2)
         self.widget.setObjectName("widget")
         self.verticalLayout_2.addWidget(self.widget)
+        self.figure=plt.figure()
+        self.canvas= FigureCanvas(self.figure)
+        self.canvas.setGeometry(QtCore.QRect(299, -1, 821, 681))
+        MainWindow.layout().addWidget(self.canvas)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -221,9 +228,16 @@ class Ui_MainWindow(object):
             DNode1=Node1.split(",")
             DNode2=Node2.split(",")
             graph.add_edge(DNode1[0],DNode2[0],weight=Cost)
+            self.showGraph()
             print(graph.nodes)
         except:
             self.error_popup("Please enter a Node")
+
+    def showGraph(self):
+        self.figure.clear()
+        pos = nx.spring_layout(graph)
+        nx.draw_networkx(graph,pos)
+        plt.draw()
 
 if __name__ == "__main__":
     import sys
