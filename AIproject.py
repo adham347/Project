@@ -56,7 +56,8 @@ class Ui_FirstWindow(object):
         self.ui= Ui_MainWindow()
         self.ui.setupUi(self.w)
         self.w.show()
-        graph=nx.DiGraph()
+        global graph
+        graph=nx.DiGraph
         MainWindow.close()
 
     def undirectedButtonClick(self):
@@ -64,6 +65,7 @@ class Ui_FirstWindow(object):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.w)
         self.w.show()
+        global graph
         graph = nx.Graph()
         MainWindow.close()
 
@@ -200,9 +202,28 @@ class Ui_MainWindow(object):
         self.RunButton.setText(_translate("MainWindow", "Run"))
         self.label_7.setText(_translate("MainWindow", "Fill in the 3 text boxes below then press add edge"))
 
+    def error_popup(self,err_msg,extra=""):
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle("Error")
+        msg.setText("An Error Occurred!")
+        msg.setIcon(QtWidgets.QMessageBox.Critical)
+        msg.setInformativeText(err_msg)
+        if extra != "" : msg.setDetailedText(extra)
+        x = msg.exec_()
+
     def addEdge(self):
-        Node1=self.FnodeIn.text()
-        Node2=self.SnodeIn.text()
+        try:
+            Cost=self.CostIn.text()
+            Node1=self.FnodeIn.text()
+            Node2=self.SnodeIn.text()
+            if len(Node1)==0 : raise Exception
+            if len(Node2) == 0: raise Exception
+            DNode1=Node1.split(",")
+            DNode2=Node2.split(",")
+            graph.add_edge(DNode1[0],DNode2[0],weight=Cost)
+            print(graph.nodes)
+        except:
+            self.error_popup("Please enter a Node")
 
 if __name__ == "__main__":
     import sys
