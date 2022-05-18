@@ -60,7 +60,7 @@ class Ui_FirstWindow(object):
         self.ui.setupUi(self.w)
         self.w.show()
         global graph
-        graph=nx.DiGraph
+        graph = nx.DiGraph()
         MainWindow.close()
 
     def undirectedButtonClick(self):
@@ -223,11 +223,13 @@ class Ui_MainWindow(object):
             Cost=self.CostIn.text()
             Node1=self.FnodeIn.text()
             Node2=self.SnodeIn.text()
-            if len(Node1)==0 : raise Exception
-            if len(Node2) == 0: raise Exception
+            if len(Node1) == 0 : raise Exception
+            if len(Node2) == 0 : raise Exception
             DNode1=Node1.split(",")
             DNode2=Node2.split(",")
             graph.add_edge(DNode1[0],DNode2[0],weight=Cost)
+
+
             self.showGraph()
             print(graph.nodes)
         except:
@@ -237,6 +239,8 @@ class Ui_MainWindow(object):
         self.figure.clear()
         pos = nx.spring_layout(graph)
         nx.draw_networkx(graph,pos)
+        edgeLabels = nx.get_edge_attributes(graph, "weight")
+        nx.draw_networkx_edge_labels(graph,pos,edgeLabels)
         plt.draw()
 
 if __name__ == "__main__":
