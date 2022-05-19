@@ -258,10 +258,10 @@ class Ui_MainWindow(object):
 
     def algoPicker(self,algoType):
         print("clicked")
-        if algoType == "Depth First":
+        if algoType == "Depth First ":
             self.dfs(graph, self.SnodeIn.text(),set())
         if algoType == "Breadth First ":
-            traced_path = self.breadth_first_search("a","c",graph)
+            traced_path = self.breadth_first_search(self.SnodeIn.text(), self.SetGoalNodeIn.text(),graph)
             if (traced_path):print('Path:', end=' '); self.print_path(traced_path, "c", graph); print()
 
     def breadth_first_search(self,start, goal, graph):
