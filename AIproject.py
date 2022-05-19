@@ -259,11 +259,12 @@ class Ui_MainWindow(object):
     def algoPicker(self,algoType):
         if algoType == "Depth First":
 
-            self.dfs(graph, 'A',set())
+            self.dfs(graph, self.SnodeIn.text(),set())
 
 
     def dfs(self,theGraph,node,visited):
         #visited = set()
+        print(graph)
         if node not in visited:
             print(node)
             visited.add(node)
