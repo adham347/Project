@@ -256,6 +256,7 @@ class Ui_MainWindow(object):
         except:
             self.showError("Please enter a Node")
 
+# to choose which  search algo
     def algoPicker(self,algoType):
         print("clicked")
         if algoType == "Depth First ":
