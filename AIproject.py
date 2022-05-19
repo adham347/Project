@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 
 #the first window class that contains the directed and undirected choice
 
+
+
 class Ui_FirstWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -27,9 +29,11 @@ class Ui_FirstWindow(object):
         self.pushButton.clicked.connect(self.directedButtonClick)
         self.pushButton.setGeometry(QtCore.QRect(110, 180, 141, 81))
         self.pushButton.setObjectName("pushButton")
+
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget) #undirected graph push button
         self.pushButton_2.clicked.connect(self.undirectedButtonClick)
         self.pushButton_2.setGeometry(QtCore.QRect(360, 180, 141, 81))
+
         self.pushButton_2.setObjectName("pushButton_2")
         self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
         self.textBrowser.setGeometry(QtCore.QRect(10, 20, 601, 61))
@@ -63,6 +67,7 @@ class Ui_FirstWindow(object):
         graph = nx.DiGraph()
         MainWindow.close()
 
+
     def undirectedButtonClick(self):
         self.w = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()
@@ -91,13 +96,19 @@ class Ui_MainWindow(object):
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
+
+
         self.FnodeIn = QtWidgets.QLineEdit(self.frame)
         self.FnodeIn.setGeometry(QtCore.QRect(10, 30, 113, 22))
         self.FnodeIn.setStyleSheet("background-color: rgb(243, 243, 243);")
         self.FnodeIn.setObjectName("FnodeIn")
+
+
         self.label = QtWidgets.QLabel(self.frame)
         self.label.setGeometry(QtCore.QRect(130, 30, 81, 16))
         self.label.setObjectName("label")
+
+
         self.SnodeIn = QtWidgets.QLineEdit(self.frame)
         self.SnodeIn.setGeometry(QtCore.QRect(10, 60, 113, 22))
         self.SnodeIn.setStyleSheet("background-color: rgb(243, 243, 243);")
@@ -122,23 +133,31 @@ class Ui_MainWindow(object):
         self.AddEdgeButton.setGeometry(QtCore.QRect(190, 80, 93, 28))
         self.AddEdgeButton.setStyleSheet("background-color: rgb(243, 243, 243);")
         self.AddEdgeButton.setObjectName("AddEdgeButton")
+        # Button Event
         self.AddEdgeButton.clicked.connect(self.addEdge)
+
+        self.startNodeLabel = QtWidgets.QLabel(self.frame)
+        self.startNodeLabel.setGeometry(QtCore.QRect(130, 170, 81, 16))
+        self.startNodeLabel.setObjectName("startNodeLabel")
+        self.startNodeLabel.setText("Start Node")
+
         self.SetStartNodeIn = QtWidgets.QLineEdit(self.frame)
         self.SetStartNodeIn.setGeometry(QtCore.QRect(10, 170, 113, 22))
         self.SetStartNodeIn.setStyleSheet("background-color: rgb(243, 243, 243);")
         self.SetStartNodeIn.setObjectName("SetStartNodeIn")
-        self.SetStartButton = QtWidgets.QPushButton(self.frame)
-        self.SetStartButton.setGeometry(QtCore.QRect(130, 170, 93, 28))
-        self.SetStartButton.setStyleSheet("background-color: rgb(243, 243, 243);")
-        self.SetStartButton.setObjectName("SetStartButton")
+
+
+        self.goalNodeLabel = QtWidgets.QLabel(self.frame)
+        self.goalNodeLabel.setGeometry(QtCore.QRect(130, 200, 81, 16))
+        self.goalNodeLabel.setObjectName("goalNodeLabel")
+        self.goalNodeLabel.setText("Goal Node")
+
         self.SetGoalNodeIn = QtWidgets.QLineEdit(self.frame)
         self.SetGoalNodeIn.setGeometry(QtCore.QRect(10, 200, 113, 22))
         self.SetGoalNodeIn.setStyleSheet("background-color: rgb(243, 243, 243);")
         self.SetGoalNodeIn.setObjectName("SetGoalNodeIn")
-        self.SetGoalButton = QtWidgets.QPushButton(self.frame)
-        self.SetGoalButton.setGeometry(QtCore.QRect(130, 200, 93, 28))
-        self.SetGoalButton.setStyleSheet("background-color: rgb(243, 243, 243);")
-        self.SetGoalButton.setObjectName("SetGoalButton")
+
+
         self.ResetButton = QtWidgets.QPushButton(self.frame)
         self.ResetButton.setGeometry(QtCore.QRect(12, 250, 271, 28))
         self.ResetButton.setStyleSheet("background-color: rgb(243, 243, 243);")
@@ -157,10 +176,14 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
+
+
         self.RunButton = QtWidgets.QPushButton(self.frame)
         self.RunButton.setGeometry(QtCore.QRect(10, 580, 271, 28))
         self.RunButton.setStyleSheet("background-color: rgb(243, 243, 243);")
         self.RunButton.setObjectName("RunButton")
+        self.RunButton.clicked.connect(lambda x: self.algoPicker(self.comboBox.currentText()))
+
         self.label_7 = QtWidgets.QLabel(self.frame)
         self.label_7.setGeometry(QtCore.QRect(10, 10, 291, 16))
         self.label_7.setObjectName("label_7")
@@ -195,12 +218,11 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "!! Type in Node,heuristic if available !!"))
         self.label_5.setText(_translate("MainWindow", "eg: A,5"))
         self.AddEdgeButton.setText(_translate("MainWindow", "Add Edge"))
-        self.SetStartButton.setText(_translate("MainWindow", "Set Start Node"))
-        self.SetGoalButton.setText(_translate("MainWindow", "Set Goal Node"))
+
         self.ResetButton.setText(_translate("MainWindow", "Reset"))
         self.label_6.setText(_translate("MainWindow", "Choose Searching Algorithm:"))
         self.comboBox.setItemText(0, _translate("MainWindow", "Breadth First "))
-        self.comboBox.setItemText(1, _translate("MainWindow", "Depth First "))
+        self.comboBox.setItemText(1, _translate("MainWindow", "Depth First"))
         self.comboBox.setItemText(2, _translate("MainWindow", "Uniform Cost "))
         self.comboBox.setItemText(3, _translate("MainWindow", "Depth Limited "))
         self.comboBox.setItemText(4, _translate("MainWindow", "Iterative Deepening"))
@@ -209,31 +231,47 @@ class Ui_MainWindow(object):
         self.RunButton.setText(_translate("MainWindow", "Run"))
         self.label_7.setText(_translate("MainWindow", "Fill in the 3 text boxes below then press add edge"))
 
-    def error_popup(self,err_msg,extra=""):
+    def showError(self,err_msg,extra=""):
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle("Error")
-        msg.setText("An Error Occurred!")
+        msg.setText("Invalid Operation")
         msg.setIcon(QtWidgets.QMessageBox.Critical)
         msg.setInformativeText(err_msg)
-        if extra != "" : msg.setDetailedText(extra)
+        msg.setDetailedText(extra)
         x = msg.exec_()
 
     def addEdge(self):
         try:
-            Cost=self.CostIn.text()
-            Node1=self.FnodeIn.text()
-            Node2=self.SnodeIn.text()
+            Cost = float(self.CostIn.text())
+            Node1 = self.FnodeIn.text()
+            Node2 = self.SnodeIn.text()
             if len(Node1) == 0 : raise Exception
             if len(Node2) == 0 : raise Exception
-            DNode1=Node1.split(",")
-            DNode2=Node2.split(",")
-            graph.add_edge(DNode1[0],DNode2[0],weight=Cost)
+
+            graph.add_edge(Node1,Node2,weight=Cost)
 
 
             self.showGraph()
-            print(graph.nodes)
+            #print(graph.nodes)
         except:
-            self.error_popup("Please enter a Node")
+            self.showError("Please enter a Node")
+
+    def algoPicker(self,algoType):
+        if algoType == "Depth First":
+
+            self.dfs(graph, self.SnodeIn.text(),set())
+
+
+    def dfs(self,theGraph,node,visited):
+        #visited = set()
+        print(graph)
+        if node not in visited:
+            print(node)
+            visited.add(node)
+            for neighbour in graph[node]:
+                self.dfs(theGraph, neighbour,visited)
+
+
 
     def showGraph(self):
         self.figure.clear()
