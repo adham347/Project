@@ -256,21 +256,25 @@ class Ui_MainWindow(object):
         except:
             self.showError("Please enter a Node")
 
+# to choose which  search algo
     def algoPicker(self,algoType):
         print("clicked")
-        if algoType == "Depth First":
+        if algoType == "Depth First ":
             self.dfs(graph, self.SnodeIn.text(),set())
         if algoType == "Breadth First ":
-            traced_path = self.breadth_first_search("a","c",graph)
-            if (traced_path):print('Path:', end=' '); self.print_path(traced_path, "c", graph); print()
+            print(f"{self.SetStartNodeIn.text()} to {self.SetGoalNodeIn.text()}")
+            traced_path = self.breadth_first_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(),graph)
+            if (traced_path):print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(), graph); print()
 
     def breadth_first_search(self,start, goal, graph):
         found, fringe, visited, came_from = False, deque([start]), set([start]), {start: None}
         print('{:11s} | {}'.format('Expand Node', 'Fringe'))
         print('--------------------')
         print('{:11s} | {}'.format('-', start))
+        traversal = []
         while not found and len(fringe):
             current = fringe.pop()
+            #traversal.append(current)
             print('{:11s}'.format(current), end=' | ')
             if current == goal: found = True; break
             for node in graph.neighbors(current):
@@ -280,13 +284,19 @@ class Ui_MainWindow(object):
             print(); return came_from
         else:
             print('No path from {} to {}'.format(start, goal))
+            return
+
 
     def print_path(self,came_from, goal, graph):
+
         parent = came_from[goal]
         if parent:
+
             self.print_path(came_from, parent, graph)
         else:
             print(goal, end='');return
+
+
         print(' =>', goal, end='')
 
     def dfs(self,theGraph,node,visited):
