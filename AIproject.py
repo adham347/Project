@@ -221,10 +221,10 @@ class Ui_MainWindow(object):
 
         self.ResetButton.setText(_translate("MainWindow", "Reset"))
         self.label_6.setText(_translate("MainWindow", "Choose Searching Algorithm:"))
-        self.comboBox.setItemText(0, _translate("MainWindow", "Breadth First "))
+        self.comboBox.setItemText(0, _translate("MainWindow", "Breadth First"))
         self.comboBox.setItemText(1, _translate("MainWindow", "Depth First"))
-        self.comboBox.setItemText(2, _translate("MainWindow", "Uniform Cost "))
-        self.comboBox.setItemText(3, _translate("MainWindow", "Depth Limited "))
+        self.comboBox.setItemText(2, _translate("MainWindow", "Uniform Cost"))
+        self.comboBox.setItemText(3, _translate("MainWindow", "Depth Limited"))
         self.comboBox.setItemText(4, _translate("MainWindow", "Iterative Deepening"))
         self.comboBox.setItemText(5, _translate("MainWindow", "Greedy"))
         self.comboBox.setItemText(6, _translate("MainWindow", "A star"))
@@ -259,12 +259,22 @@ class Ui_MainWindow(object):
 # to choose which  search algo
     def algoPicker(self,algoType):
         print("clicked")
-        if algoType == "Depth First ":
-            self.dfs(graph, self.SnodeIn.text(),set())
-        if algoType == "Breadth First ":
-            print(f"{self.SetStartNodeIn.text()} to {self.SetGoalNodeIn.text()}")
+        if algoType == "Depth First":
+            traced_path = self.depth_first_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(), graph)
+            if (traced_path): print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(), graph); print()
+
+        if algoType == "Breadth First":
             traced_path = self.breadth_first_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(),graph)
             if (traced_path):print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(), graph); print()
+
+        if algoType == "Depth Limited":
+            traced_path = self.depth_limited_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(),graph,-1)
+            if (traced_path):print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(), graph); print()
+
+        if algoType == "Iterative Deepening":
+            traced_path = self.iterative_deepening_dfs(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(), graph)
+            if (traced_path): print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(),graph); print()
+
 
     def breadth_first_search(self,start, goal, graph):
         found, fringe, visited, came_from = False, deque([start]), set([start]), {start: None}
@@ -286,6 +296,56 @@ class Ui_MainWindow(object):
             print('No path from {} to {}'.format(start, goal))
             return
 
+    def depth_first_search(self, start, goal, graph):
+        found, fringe, visited, came_from = False, deque([start]), set([start]), {start: None}
+        print('{:11s} | {}'.format('Expand Node', 'Fringe'))
+        print('--------------------')
+        print('{:11s} | {}'.format('-', start))
+        while not found and len(fringe):
+            current = fringe.pop()
+            print('{:11s}'.format(current), end=' | ')
+            if current == goal: found = True; break
+            for node in graph.neighbors(current):
+                if node not in visited: visited.add(node); fringe.append(node); came_from[node] = current
+            print(', '.join(fringe))
+        if found:
+            print(); return came_from
+        else:
+            print('No path from {} to {}'.format(start, goal))
+
+    def iterative_deepening_dfs(self, start, goal,graph):
+        prev_iter_visited, depth = [], 0
+        while True:
+            traced_path, visited = self.depth_limited_search(start, goal,graph, depth)
+            if traced_path or len(visited) == len(prev_iter_visited):
+                return traced_path
+            else:
+                prev_iter_visited = visited; depth += 1
+
+
+    def depth_limited_search(self, start, goal, graph, limit=-1):
+        print('Depth limit =', limit)
+        found, fringe, visited, came_from = False, deque([(0, start)]), set([start]), {start: None}
+        print('{:11s} | {}'.format('Expand Node', 'Fringe'))
+        print('--------------------')
+        print('{:11s} | {}'.format('-', start))
+        while not found and len(fringe):
+            depth, current = fringe.pop()
+            print('{:11s}'.format(current), end=' | ')
+            if current == goal: found = True; break
+            if limit == -1 or depth < limit:
+                for node in graph.neighbors(current):
+                    if node not in visited:
+                        visited.add(node);
+                        fringe.append((depth + 1, node))
+                        came_from[node] = current
+            print(', '.join([n for _, n in fringe]))
+        if found:
+            print();
+            return came_from
+        else:
+            print('No path from {} to {}'.format(start, goal))
+            return
 
     def print_path(self,came_from, goal, graph):
 
