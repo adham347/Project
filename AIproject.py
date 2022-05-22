@@ -179,6 +179,15 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
 
+        self.label_8=QtWidgets.QLabel(self.frame)
+        self.label_8.setGeometry(QtCore.QRect(10,350,190,16))
+        self.label_8.setObjectName("label_7")
+
+        self.LimitIn=QtWidgets.QLineEdit(self.frame)
+        self.LimitIn.setGeometry(QtCore.QRect(10, 370, 113, 22))
+        self.LimitIn.setStyleSheet("background-color: rgb(243, 243, 243);")
+        self.LimitIn.setObjectName("LimitIn")
+
         self.RunButton = QtWidgets.QPushButton(self.frame)
         self.RunButton.setGeometry(QtCore.QRect(10, 580, 271, 28))
         self.RunButton.setStyleSheet("background-color: rgb(243, 243, 243);")
@@ -230,6 +239,7 @@ class Ui_MainWindow(object):
         self.comboBox.setItemText(4, _translate("MainWindow", "Iterative Deepening"))
         self.comboBox.setItemText(5, _translate("MainWindow", "Greedy"))
         self.comboBox.setItemText(6, _translate("MainWindow", "A star"))
+        self.label_8.setText(_translate("MainWindow", "Depth for Depth Limited Search:"))
         self.RunButton.setText(_translate("MainWindow", "Run"))
         self.label_7.setText(_translate("MainWindow", "Fill in the 3 text boxes below then press add edge"))
 
@@ -316,7 +326,7 @@ class Ui_MainWindow(object):
             if (traced_path): print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(),graph); print()
 
         if algoType == "Depth Limited":
-            traced_path = self.depth_limited_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(), graph, -1)
+            traced_path = self.depth_limited_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(), graph, int(self.LimitIn.text()))
             if (traced_path): print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(),graph); print()
 
         if algoType == "Iterative Deepening":
