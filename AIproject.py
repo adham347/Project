@@ -349,6 +349,8 @@ class Ui_MainWindow(object):
 
 
     def showSoln(self, title, text):
+        if not self.pathGetter():
+            text = f"Nodes Visited: {self.traversalGetter()}\nPath taken: No Path Found"
         msg = QtWidgets.QMessageBox()
         msg.setWindowTitle(title)
         msg.setText(text)
