@@ -304,6 +304,14 @@ class Ui_MainWindow(object):
             traced_path, cost = self.uniform_cost_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(), graph)
             if (traced_path): print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(),graph); print('\n cost:', cost)
 
+        if algoType == "Greedy":
+            traced_path, cost = self.greedy_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(), graph)
+            if (traced_path): print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(),graph); print('\nCost:', cost)
+
+        if algoType == "A star":
+            traced_path, cost = self.a_star_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(), graph)
+            if (traced_path): print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(),graph); print('\nCost:', cost)
+
     def breadth_first_search(self, start, goal, graph):
         found, fringe, visited, came_from = False, deque([start]), set([start]), {start: None}
         print('{:11s} | {}'.format('Expand Node', 'Fringe'))
@@ -417,6 +425,55 @@ class Ui_MainWindow(object):
                     came_from[node] = current;
                     cost_so_far[node] = new_cost
                     heappush(fringe, (new_cost, node))
+            print(', '.join([str(n) for n in fringe]))
+        if found:
+            print();
+            return came_from, cost_so_far[goal]
+        else:
+            print('No path from {} to {}'.format(start, goal));
+            return None, inf
+
+    def greedy_search(self, start, goal, graph):
+        H=nx.get_node_attributes(graph,'H')
+        found, fringe, visited, came_from, cost_so_far = False, [(H[start], start)], set([start]), {start: None}, {start: 0}
+        print('{:11s} | {}'.format('Expand Node', 'Fringe'))
+        print('--------------------')
+        print('{:11s} | {}'.format('-', str(fringe[0])))
+        while not found and len(fringe):
+            _, current = heappop(fringe)
+            print('{:11s}'.format(current), end=' | ')
+            if current == goal: found = True; break
+            for node in graph.neighbors(current):
+                new_cost = cost_so_far[current] + nx.path_weight(graph, [current, node], "weight")
+                if node not in visited or cost_so_far[node] > new_cost:
+                    visited.add(node);
+                    came_from[node] = current;
+                    cost_so_far[node] = new_cost
+                    heappush(fringe, (H[node], node))
+            print(', '.join([str(n) for n in fringe]))
+        if found:
+            print(); return came_from, cost_so_far[goal]
+        else:
+            print('No path from {} to {}'.format(start, goal)); return None, inf
+
+    def a_star_search(self,start, goal, graph):
+        H=nx.get_node_attributes(graph,'H')
+        found, fringe, visited, came_from, cost_so_far = False, [(H[start], start)], set([start]), {
+            start: None}, {start: 0}
+        print('{:11s} | {}'.format('Expand Node', 'Fringe'))
+        print('--------------------')
+        print('{:11s} | {}'.format('-', str(fringe[0])))
+        while not found and len(fringe):
+            _, current = heappop(fringe)
+            print('{:11s}'.format(current), end=' | ')
+            if current == goal: found = True; break
+            for node in graph.neighbors(current):
+                new_cost = cost_so_far[current] + nx.path_weight(graph, [current, node], "weight")
+                if node not in visited or cost_so_far[node] > new_cost:
+                    visited.add(node);
+                    came_from[node] = current;
+                    cost_so_far[node] = new_cost
+                    heappush(fringe, (new_cost + float(H[node]), node))  # heappush(fringe, (new_cost + H[node], node)
             print(', '.join([str(n) for n in fringe]))
         if found:
             print();
