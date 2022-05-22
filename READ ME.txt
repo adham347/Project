@@ -1,1 +1,6 @@
 Open AIproject.py and run the script the gui should launch
+
+The following Liberaries should be installed first:
+PyQt5
+networkx
+matplotlib
