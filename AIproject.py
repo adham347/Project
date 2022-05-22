@@ -162,6 +162,8 @@ class Ui_MainWindow(object):
         self.ResetButton.setGeometry(QtCore.QRect(12, 250, 271, 28))
         self.ResetButton.setStyleSheet("background-color: rgb(243, 243, 243);")
         self.ResetButton.setObjectName("ResetButton")
+        self.ResetButton.clicked.connect(self.reset)
+
         self.label_6 = QtWidgets.QLabel(self.frame)
         self.label_6.setGeometry(QtCore.QRect(10, 300, 171, 16))
         self.label_6.setObjectName("label_6")
@@ -281,6 +283,11 @@ class Ui_MainWindow(object):
         nx.draw_networkx_edge_labels(graph, pos, edgeLabels)
         plt.draw()
 
+    def reset(self):
+        self.figure.clear()
+        graph.clear()
+        self.showGraphWithH()
+
     def pathSetter(self):
         self.myPath = []
 
@@ -329,6 +336,7 @@ class Ui_MainWindow(object):
             if (traced_path): print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(),graph); print('\nCost:', cost)
 
         self.showSoln("Path and Traversal",f"Nodes Visited: {self.traversalGetter()}\nPath taken: {' => '.join(self.pathGetter())}")
+
 
     def showSoln(self, title, text):
         msg = QtWidgets.QMessageBox()
