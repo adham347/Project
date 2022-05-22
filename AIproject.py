@@ -281,8 +281,24 @@ class Ui_MainWindow(object):
         nx.draw_networkx_edge_labels(graph, pos, edgeLabels)
         plt.draw()
 
+    def pathSetter(self):
+        self.myPath = []
+
+    def pathGetter(self):
+        return self.myPath
+
+    def traversalSetter(self):
+        self.traversal = []
+
+    def traversalGetter(self):
+        return self.traversal
+
     # to choose which  search algo
     def algoPicker(self, algoType):
+
+        self.pathSetter()
+        self.traversalSetter()
+
         print("clicked")
         if algoType == "Depth First":
             traced_path = self.depth_first_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(), graph)
@@ -312,15 +328,23 @@ class Ui_MainWindow(object):
             traced_path, cost = self.a_star_search(self.SetStartNodeIn.text(), self.SetGoalNodeIn.text(), graph)
             if (traced_path): print('Path:', end=' '); self.print_path(traced_path, self.SetGoalNodeIn.text(),graph); print('\nCost:', cost)
 
+        self.showSoln("Path and Traversal",f"Nodes Visited: {self.traversalGetter()}\nPath taken: {' => '.join(self.pathGetter())}")
+
+    def showSoln(self, title, text):
+        msg = QtWidgets.QMessageBox()
+        msg.setWindowTitle(title)
+        msg.setText(text)
+        msg.exec_()
+
     def breadth_first_search(self, start, goal, graph):
         found, fringe, visited, came_from = False, deque([start]), set([start]), {start: None}
         print('{:11s} | {}'.format('Expand Node', 'Fringe'))
         print('--------------------')
         print('{:11s} | {}'.format('-', start))
-        traversal = []
+
         while not found and len(fringe):
             current = fringe.pop()
-            # traversal.append(current)
+            self.traversal.append(current)
             print('{:11s}'.format(current), end=' | ')
             if current == goal: found = True; break
             for node in graph.neighbors(current):
@@ -340,6 +364,7 @@ class Ui_MainWindow(object):
         print('{:11s} | {}'.format('-', start))
         while not found and len(fringe):
             current = fringe.pop()
+            self.traversal.append(current)
             print('{:11s}'.format(current), end=' | ')
             if current == goal: found = True; break
             for node in graph.neighbors(current):
@@ -369,6 +394,7 @@ class Ui_MainWindow(object):
         print('{:11s} | {}'.format('-', start))
         while not found and len(fringe):
             depth, current = fringe.pop()
+            self.traversal.append(current)
             print('{:11s}'.format(current), end=' | ')
             if current == goal: found = True; break
             if limit == -1 or depth < limit:
@@ -393,6 +419,7 @@ class Ui_MainWindow(object):
         print('{:11s} | {}'.format('-', start))
         while not found and len(fringe):
             depth, current = fringe.pop()
+            self.traversal.append(current)
             print('{:11s}'.format(current), end=' | ')
             if current == goal: found = True; break
             if limit == -1 or depth < limit:
@@ -416,6 +443,7 @@ class Ui_MainWindow(object):
         print('{:11s} | {}'.format('-', str((0, start))))
         while not found and len(fringe):
             _, current = heappop(fringe)
+            self.traversal.append(current)
             print('{:11s}'.format(current), end=' | ')
             if current == goal: found = True; break
             for node in graph.neighbors(current):
@@ -441,6 +469,7 @@ class Ui_MainWindow(object):
         print('{:11s} | {}'.format('-', str(fringe[0])))
         while not found and len(fringe):
             _, current = heappop(fringe)
+            self.traversal.append(current)
             print('{:11s}'.format(current), end=' | ')
             if current == goal: found = True; break
             for node in graph.neighbors(current):
@@ -465,6 +494,7 @@ class Ui_MainWindow(object):
         print('{:11s} | {}'.format('-', str(fringe[0])))
         while not found and len(fringe):
             _, current = heappop(fringe)
+            self.traversal.append(current)
             print('{:11s}'.format(current), end=' | ')
             if current == goal: found = True; break
             for node in graph.neighbors(current):
@@ -482,26 +512,18 @@ class Ui_MainWindow(object):
             print('No path from {} to {}'.format(start, goal));
             return None, inf
 
-    def print_path(self, came_from, goal, graph):
-
+    def print_path(self,came_from, goal, graph):
         parent = came_from[goal]
         if parent:
-
             self.print_path(came_from, parent, graph)
         else:
             print(goal, end='');
-            return
+            self.myPath.append(goal)
 
+            return
+        self.myPath.append(goal)
         print(' =>', goal, end='')
 
-    def dfs(self, theGraph, node, visited):
-        # visited = set()
-        print(graph)
-        if node not in visited:
-            print(node)
-            visited.add(node)
-            for neighbour in graph[node]:
-                self.dfs(theGraph, neighbour, visited)
 
 
 
