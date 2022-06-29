@@ -1,4 +1,4 @@
-# AI Project
+# AI_Project
 
 This project is a group project for the subject Artificial Intelligence
 
