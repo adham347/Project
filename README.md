@@ -1,6 +1,6 @@
-# Project
-AI project
-AI project is a group project for the subject Artificial Intelligence
+# AI Project
+
+This project is a group project for the subject Artificial Intelligence
 
 The project is a python GUI app that can draw weighted graphs with some start nodes and goal nodes. The app offers various informed and uninformed AI search strategies
 and computes the nodes visited and path taken to reach the goal node based on the graph drawn by the user and the search strategy selected  
